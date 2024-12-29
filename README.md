@@ -1,23 +1,23 @@
 ### README
 
-#### 1. 程序概述
-该程序主要用于**网络设备的配置备份**。它通过读取包含设备信息的JSON文件，连接到指定的网络设备，并执行预定义的命令来获取设备的当前配置。然后，它将这些配置保存到指定的输出目录中，以便后续查阅和恢复。
+#### 1. Program Overview  
+This program is designed to **automate the backup of network device configurations**. It reads a JSON file containing device information, connects to the specified network devices, and executes predefined commands to retrieve the current configurations. These configurations are then saved to a designated output directory for future reference or recovery.
 
-##### 主要功能
-- **自动化备份**：程序可以定期或按需运行，自动连接到多个网络设备并备份其配置，减少人工操作的时间和错误。
-- **多设备支持**：支持多种类型的网络设备（如路由器、交换机、防火墙等），确保不同品牌和型号的设备都能被正确处理。
-- **多种连接方式**：可以通过SSH或Telnet连接到设备，适应不同的网络环境和安全要求。
-- **命令自定义**：用户可以在JSON配置文件中指定需要执行的命令，以获取特定的配置信息或状态数据。
-- **灵活的输出管理**：备份结果会根据日期创建子目录，并以设备名称命名保存为文本文件，方便管理和查找。
+##### What Can It Do?  
+- **Automated Backups**: You can schedule or manually run the program to automatically connect to multiple network devices and back up their configurations, saving time and reducing manual errors.  
+- **Multi-Device Support**: It supports various types of network devices (e.g., routers, switches, firewalls), ensuring compatibility across different brands and models.  
+- **Multiple Connection Methods**: Supports both SSH and Telnet connections, adapting to different network environments and security requirements.  
+- **Custom Commands**: You can specify the commands to execute in the JSON configuration file, allowing you to retrieve specific configuration details or device statuses.  
+- **Smart Backup Management**: Backup results are organized by date and saved as text files named after the device, making it easy to manage and locate backups.  
 
-##### 使用场景
-- **日常维护**：网络管理员可以定期使用该程序备份设备配置，确保在设备故障或配置变更时能够快速恢复。
-- **变更管理**：在进行网络变更前，使用该程序备份现有配置，作为变更前的快照，便于对比和回滚。
-- **审计与合规**：满足企业内部或外部审计要求，提供完整的配置历史记录，确保符合相关法规和标准。
-- **灾难恢复**：在网络发生重大故障时，可以从备份文件中恢复设备配置，缩短恢复时间，减少业务中断。
+##### Use Cases  
+- **Routine Maintenance**: Network administrators can regularly back up device configurations to ensure quick recovery in case of device failures or misconfigurations.  
+- **Change Management**: Before making network changes, back up the current configuration as a snapshot for easy comparison or rollback.  
+- **Audit and Compliance**: Meet internal or external audit requirements by maintaining a complete history of configuration changes, ensuring compliance with relevant regulations.  
+- **Disaster Recovery**: In the event of a major network failure, quickly restore device configurations from backup files to minimize downtime.  
 
-#### 2. 配置文件格式
-配置文件为JSON格式，示例如下：
+#### 2. Configuration File Format  
+The configuration file is in JSON format. Here’s an example:  
 
 ```json
 [
@@ -34,48 +34,47 @@
 ]
 ```
 
-#### 3. 命令行参数
-程序支持以下命令行参数：
-- `-json`：指定JSON配置文件路径，默认为`data.json`。
-- `-output`：指定输出目录，默认为`./output/`。
-- `-filter`：指定过滤条件，可以多次使用以添加多个过滤条件。示例：`--filter conf --filter shut`。
+#### 3. Command-Line Arguments  
+The program supports the following command-line arguments:  
+- `-json`: Specifies the path to the JSON configuration file (default: `data.json`).  
+- `-output`: Specifies the output directory (default: `./output/`).  
+- `-filter`: Specifies filtering criteria. Can be used multiple times to add multiple filters. Example: `--filter conf --filter shut`.  
 
-
-#### 4. 运行程序
-在终端中运行以下命令来启动程序：
+#### 4. Running the Program  
+To start the program, run the following command in your terminal:  
 
 ```bash
 config_backup -json=path/to/config.json -output=path/to/output/ --filter conf --filter shut
 ```
 
-#### 5. 输出结果
-程序会根据当前日期创建一个子目录（如`20231010`），并将每个设备的命令输出保存为文本文件，文件名为设备名称加上`.txt`后缀，保存在指定的输出目录中。
+#### 5. Output Results  
+The program creates a subdirectory based on the current date (e.g., `20231010`) and saves the command output for each device as a text file. The files are named after the device and stored in the specified output directory.  
 
-#### 6. 支持的设备类型
-目前支持的设备类型包括：
-- IOS
-- SRX
-- ASA
-- HuaWei
-- Comware
-- F5
-- HillStone
-- NEXUS
+#### 6. Supported Device Types  
+Currently supported device types include:  
+- IOS  
+- SRX  
+- ASA  
+- HuaWei  
+- Comware  
+- F5  
+- HillStone  
+- NEXUS  
 
-如果尝试使用不支持的设备类型，程序会提示错误并跳过该设备。
+If an unsupported device type is encountered, the program will log an error and skip that device.  
 
-#### 7. 错误处理
-- 如果读取或解析JSON文件失败，程序将终止并输出错误信息。
-- 如果创建输出目录失败，程序将终止并输出错误信息。
-- 如果设备类型不支持，程序将跳过该设备并输出错误信息。
-- 如果执行命令失败，程序将继续处理下一个设备并输出错误信息。
+#### 7. Error Handling  
+- If reading or parsing the JSON file fails, the program will terminate and display an error message.  
+- If creating the output directory fails, the program will terminate and display an error message.  
+- If an unsupported device type is encountered, the program will skip the device and log an error.  
+- If a command fails to execute, the program will continue processing the next device and log an error.  
 
-#### 8. 注意事项
-- 确保配置文件中的IP地址、用户名和密码正确无误。
-- 确保目标设备允许通过SSH或Telnet连接。
-- 确保输出目录路径存在或具有写权限。
+#### 8. Notes  
+- Ensure the IP addresses, usernames, and passwords in the configuration file are correct.  
+- Ensure the target devices allow SSH or Telnet connections.  
+- Ensure the output directory path exists and you have write permissions.  
 
-#### 9. 联系支持
-如果有任何问题或需要进一步的帮助，请联系技术支持团队。
+#### 9. Support  
+If you encounter any issues or need further assistance, please contact our technical support team.  
 
----
+---  
